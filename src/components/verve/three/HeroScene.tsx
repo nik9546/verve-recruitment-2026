@@ -40,8 +40,8 @@ function Camera3D({ position }: { position: [number, number, number] }) {
           <boxGeometry args={[0.9, 0.55, 0.55]} />
           <meshStandardMaterial color="#0f1e3d" metalness={0.8} roughness={0.2} />
         </mesh>
-        <mesh position={[0, 0, 0.3]}>
-          <cylinderGeometry args={[0.22, 0.22, 0.25, 32]} rotation={[Math.PI / 2, 0, 0]} />
+        <mesh position={[0, 0, 0.3]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.22, 0.22, 0.25, 32]} />
           <meshStandardMaterial color="#d9b25b" metalness={1} roughness={0.15} />
         </mesh>
         <mesh position={[0.3, 0.32, 0]}>
@@ -85,11 +85,13 @@ function Particles({ count = 80 }: { count?: number }) {
   useFrame((_, dt) => {
     if (ref.current) ref.current.rotation.y += dt * 0.04;
   });
+  const geom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    return g;
+  }, [positions]);
   return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
-      </bufferGeometry>
+    <points ref={ref} geometry={geom}>
       <pointsMaterial color="#f4d77a" size={0.04} transparent opacity={0.7} sizeAttenuation />
     </points>
   );
