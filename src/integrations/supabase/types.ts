@@ -14,7 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      verve_applications: {
+        Row: {
+          availability: string
+          commitment: boolean
+          course: string
+          created_at: string
+          departments: string[]
+          email: string
+          full_name: string
+          id: string
+          insight: string | null
+          motivation: string
+          phone: string
+          roll_number: string
+          semester: string
+        }
+        Insert: {
+          availability: string
+          commitment: boolean
+          course: string
+          created_at?: string
+          departments: string[]
+          email: string
+          full_name: string
+          id?: string
+          insight?: string | null
+          motivation: string
+          phone: string
+          roll_number: string
+          semester: string
+        }
+        Update: {
+          availability?: string
+          commitment?: boolean
+          course?: string
+          created_at?: string
+          departments?: string[]
+          email?: string
+          full_name?: string
+          id?: string
+          insight?: string | null
+          motivation?: string
+          phone?: string
+          roll_number?: string
+          semester?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
