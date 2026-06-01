@@ -54,6 +54,35 @@ export function Hero() {
           St. Xavier's College (Autonomous), Ranchi
         </motion.div>
 
+        {/* Official collaboration lockup */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.05 }}
+          className="mb-8 flex items-center justify-center gap-5 sm:gap-7"
+        >
+          <div className="relative">
+            <span aria-hidden className="absolute -inset-3 rounded-2xl bg-gold/20 blur-xl opacity-70" />
+            <img
+              src={verveLogo}
+              alt="VERVE"
+              className="relative h-12 sm:h-16 w-auto"
+              draggable={false}
+            />
+          </div>
+          <span aria-hidden className="h-10 sm:h-12 w-px bg-gradient-to-b from-transparent via-gold/70 to-transparent" />
+          <div className="relative">
+            <span aria-hidden className="absolute -inset-2 rounded-full bg-gold/20 blur-xl opacity-70" />
+            <img
+              src={collegeCrest}
+              alt="St. Xavier's College, Ranchi"
+              className="relative h-12 w-12 sm:h-16 sm:w-16 object-contain rounded-full bg-white/95 p-1.5 ring-1 ring-[color:var(--glass-border-gold)]"
+              draggable={false}
+            />
+          </div>
+        </motion.div>
+
+
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}

@@ -14,6 +14,7 @@ import { Process } from "@/components/verve/Process";
 import { WhatWeValue } from "@/components/verve/WhatWeValue";
 import { Countdown } from "@/components/verve/Countdown";
 import { FinalCTA } from "@/components/verve/FinalCTA";
+import { FollowVerve } from "@/components/verve/FollowVerve";
 import { ApplicationForm } from "@/components/verve/ApplicationForm";
 import { SuccessModal } from "@/components/verve/SuccessModal";
 import { Footer } from "@/components/verve/Footer";
@@ -60,6 +61,7 @@ function Index() {
       <WhatWeValue />
       <FinalCTA />
       <ApplicationForm onSuccess={() => setSuccess(true)} />
+      <FollowVerve />
       <Footer />
       <SuccessModal open={success} onClose={() => setSuccess(false)} />
     </main>
