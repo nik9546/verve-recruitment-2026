@@ -18,14 +18,17 @@ function diff() {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export function Countdown() {
-  const [t, setT] = useState(diff());
+  const [mounted, setMounted] = useState(false);
+  const [t, setT] = useState<ReturnType<typeof diff>>(null);
 
   useEffect(() => {
+    setMounted(true);
+    setT(diff());
     const id = setInterval(() => setT(diff()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const closed = t === null;
+  const closed = mounted && t === null;
 
   return (
     <section className="relative py-20">
