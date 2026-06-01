@@ -18,14 +18,17 @@ function diff() {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export function Countdown() {
-  const [t, setT] = useState(diff());
+  const [mounted, setMounted] = useState(false);
+  const [t, setT] = useState<ReturnType<typeof diff>>(null);
 
   useEffect(() => {
+    setMounted(true);
+    setT(diff());
     const id = setInterval(() => setT(diff()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const closed = t === null;
+  const closed = mounted && t === null;
 
   return (
     <section className="relative py-20">
@@ -52,17 +55,17 @@ export function Countdown() {
               )}
             </h3>
 
-            {!closed && t && (
+            {!closed && (
               <div className="mt-10 grid grid-cols-4 gap-3 sm:gap-5 max-w-3xl mx-auto">
                 {[
-                  { v: t.d, l: "Days" },
-                  { v: t.h, l: "Hours" },
-                  { v: t.m, l: "Minutes" },
-                  { v: t.s, l: "Seconds" },
+                  { v: t?.d, l: "Days" },
+                  { v: t?.h, l: "Hours" },
+                  { v: t?.m, l: "Minutes" },
+                  { v: t?.s, l: "Seconds" },
                 ].map((it) => (
                   <div key={it.l} className="glass rounded-2xl py-5 sm:py-7 px-2 border border-[color:var(--glass-border-gold)]">
                     <div className="font-display text-4xl sm:text-6xl font-semibold text-gradient-gold tabular-nums">
-                      {pad(it.v)}
+                      {mounted && t ? pad(it.v as number) : "--"}
                     </div>
                     <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.28em] text-muted-foreground">
                       {it.l}

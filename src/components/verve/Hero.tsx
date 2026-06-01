@@ -82,9 +82,9 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35 }}
-          className="mt-3 text-sm sm:text-base uppercase tracking-[0.32em] text-gold/90"
+          className="mt-4 tagline-motto text-base sm:text-lg md:text-xl"
         >
-          Create. Innovate. Lead. Inspire.
+          Creating Impact Through Digital Excellence
         </motion.p>
 
         <motion.div

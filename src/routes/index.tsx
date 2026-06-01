@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Apply to VERVE — the Official Social Media & Digital Media Hub of St. Xavier's College (Autonomous), Ranchi. Create. Innovate. Lead. Inspire.",
+          "Apply to VERVE — the Official Social Media & Digital Media Hub of St. Xavier's College (Autonomous), Ranchi. Creating Impact Through Digital Excellence.",
       },
       { property: "og:title", content: "VERVE Recruitment Portal 2026" },
       {

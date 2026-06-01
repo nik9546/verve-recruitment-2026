@@ -36,8 +36,8 @@ export function Footer() {
             <p className="text-sm text-muted-foreground max-w-md">
               St. Xavier's College (Autonomous), Ranchi.
             </p>
-            <p className="mt-4 font-display text-xl sm:text-2xl text-balance leading-snug max-w-md">
-              Creating Impact Through <span className="text-gradient-gold">Digital Excellence.</span>
+            <p className="mt-4 tagline-motto text-xl sm:text-2xl leading-snug max-w-md">
+              Creating Impact Through Digital Excellence
             </p>
 
             <div className="mt-6 flex items-center gap-3">

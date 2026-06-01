@@ -220,4 +220,16 @@
     50% { box-shadow: 0 0 0 14px oklch(0.82 0.14 88 / 0%); }
   }
   .pulse-gold { animation: pulse-gold 2.4s ease-out infinite; }
+
+  .tagline-motto {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    background: var(--gradient-text-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 24px oklch(0.82 0.14 88 / 0.35);
+    filter: drop-shadow(0 0 14px oklch(0.82 0.14 88 / 0.25));
+  }
 }

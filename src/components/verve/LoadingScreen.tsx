@@ -53,9 +53,9 @@ export function LoadingScreen() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="mt-6 text-xs sm:text-sm uppercase tracking-[0.4em] text-muted-foreground"
+              className="mt-6 tagline-motto text-sm sm:text-base"
             >
-              Create. Innovate. Lead. Inspire.
+              Creating Impact Through Digital Excellence
             </motion.div>
 
             <motion.div
