@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { StatCounter } from "./StatCounter";
+import verveLogo from "@/assets/verve-logo.png";
+import collegeCrest from "@/assets/college-crest.png";
 
 const HeroScene = lazy(() => import("./three/HeroScene"));
 

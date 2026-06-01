@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Instagram, Facebook } from "lucide-react";
+import verveLogo from "@/assets/verve-logo.png";
+import collegeCrest from "@/assets/college-crest.png";
+import { INSTAGRAM_URL, FACEBOOK_URL } from "./FollowVerve";
 
 const NAV_LINKS = [
   { href: "#about", label: "About" },
@@ -45,14 +48,20 @@ export function Nav() {
               scrolled ? "glass-strong" : "glass"
             }`}
           >
-            <a href="#top" className="flex items-center gap-2.5 group">
-              <div className="relative w-9 h-9 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold">
-                <span className="font-display text-navy-deep font-bold text-lg">V</span>
+            <a href="#top" className="flex items-center gap-3 group min-w-0">
+              <div className="relative shrink-0">
+                <span aria-hidden className="absolute -inset-1.5 rounded-xl bg-gold/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+                <img
+                  src={verveLogo}
+                  alt="VERVE"
+                  className="relative h-9 sm:h-10 w-auto select-none"
+                  draggable={false}
+                />
               </div>
-              <div className="leading-tight">
+              <div className="leading-tight hidden sm:block min-w-0">
                 <div className="font-display font-semibold tracking-tight text-base">VERVE</div>
-                <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground hidden sm:block">
-                  Recruitment 2026
+                <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground truncate">
+                  Official Social Media &amp; Digital Media Hub
                 </div>
               </div>
             </a>
@@ -70,6 +79,16 @@ export function Nav() {
             </nav>
 
             <div className="flex items-center gap-2">
+              <div className="relative shrink-0 hidden sm:flex items-center">
+                <span aria-hidden className="absolute -inset-1.5 rounded-full bg-gold/20 blur-md opacity-60" />
+                <img
+                  src={collegeCrest}
+                  alt="St. Xavier's College, Ranchi"
+                  title="St. Xavier's College (Autonomous), Ranchi"
+                  className="relative h-9 w-9 object-contain rounded-full bg-white/95 p-1 ring-1 ring-[color:var(--glass-border-gold)]"
+                  draggable={false}
+                />
+              </div>
               <a
                 href="#apply"
                 className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-gold text-navy-deep font-semibold text-sm shadow-gold hover:shadow-gold-strong transition-all hover:scale-[1.03]"
@@ -134,6 +153,30 @@ export function Nav() {
               >
                 Apply Now →
               </a>
+
+              <div className="mt-10 text-center">
+                <div className="text-[11px] uppercase tracking-[0.28em] text-gold mb-4">Follow VERVE</div>
+                <div className="flex items-center justify-center gap-4">
+                  <a
+                    href={INSTAGRAM_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="w-12 h-12 rounded-full glass border border-[color:var(--glass-border-gold)] flex items-center justify-center hover:shadow-gold transition-all"
+                  >
+                    <Instagram className="w-5 h-5 text-gold" />
+                  </a>
+                  <a
+                    href={FACEBOOK_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="w-12 h-12 rounded-full glass border border-[color:var(--glass-border-gold)] flex items-center justify-center hover:shadow-gold transition-all"
+                  >
+                    <Facebook className="w-5 h-5 text-gold" />
+                  </a>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
