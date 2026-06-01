@@ -24,13 +24,16 @@ export function Footer() {
           <div className="space-y-2 text-sm text-muted-foreground">
             <div className="text-xs uppercase tracking-[0.28em] text-gold mb-3">Reach</div>
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-gold" /> St. Xavier's College (Autonomous), Ranchi
+              <MapPin className="w-4 h-4 text-gold shrink-0" />
+              <span>St. Xavier's College (Autonomous), Ranchi</span>
             </div>
             <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-gold" /> verve@sxcran.org
+              <Mail className="w-4 h-4 text-gold shrink-0" />
+              <span>verve@sxcran.org</span>
             </div>
             <div className="flex items-center gap-2">
-              <Instagram className="w-4 h-4 text-gold" /> @verve.sxcran
+              <Instagram className="w-4 h-4 text-gold shrink-0" />
+              <span>@verve.sxcran</span>
             </div>
           </div>
 
