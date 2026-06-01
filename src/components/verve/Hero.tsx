@@ -56,13 +56,18 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[0.95] font-semibold tracking-tight"
+          className="relative font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[0.95] font-semibold tracking-tight"
         >
-          VERVE
-          <span className="block mt-2 text-3xl sm:text-4xl md:text-5xl text-gradient-gold font-medium">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -top-10 -bottom-10 mx-auto max-w-3xl bg-gold/20 blur-[80px] opacity-70"
+          />
+          <span className="relative">VERVE</span>
+          <span className="relative block mt-2 text-3xl sm:text-4xl md:text-5xl text-gradient-gold font-medium">
             Recruitment Portal 2026
           </span>
         </motion.h1>
+
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -110,17 +115,23 @@ export function Hero() {
           className="mt-16 sm:mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto"
         >
           <div className="glass rounded-2xl py-6 px-4">
-            <StatCounter value={1} label="Official Media Team" />
-          </div>
-          <div className="glass rounded-2xl py-6 px-4">
             <StatCounter value={12} suffix="+" label="Skill Domains" />
-          </div>
-          <div className="glass rounded-2xl py-6 px-4">
-            <StatCounter value={6} suffix="+" label="Leadership Roles" />
           </div>
           <div className="glass rounded-2xl py-6 px-4">
             <StatCounter value={4} label="Recognition Tiers" />
           </div>
+          <div className="glass rounded-2xl py-6 px-4">
+            <StatCounter value={5} label="Leadership Levels" />
+          </div>
+          <div className="glass rounded-2xl py-6 px-4 text-center">
+            <div className="font-display text-4xl sm:text-5xl font-semibold text-gradient-gold">
+              Official
+            </div>
+            <div className="mt-2 text-xs sm:text-sm uppercase tracking-[0.2em] text-muted-foreground">
+              Media Team
+            </div>
+          </div>
+
         </motion.div>
       </div>
 

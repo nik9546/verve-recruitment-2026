@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { LoadingScreen } from "@/components/verve/LoadingScreen";
 import { Nav } from "@/components/verve/Nav";
 import { Hero } from "@/components/verve/Hero";
 import { About } from "@/components/verve/About";
@@ -10,6 +11,9 @@ import { Certification } from "@/components/verve/Certification";
 import { GoalsObjectives } from "@/components/verve/GoalsObjectives";
 import { Policies } from "@/components/verve/Policies";
 import { Process } from "@/components/verve/Process";
+import { WhatWeValue } from "@/components/verve/WhatWeValue";
+import { Countdown } from "@/components/verve/Countdown";
+import { FinalCTA } from "@/components/verve/FinalCTA";
 import { ApplicationForm } from "@/components/verve/ApplicationForm";
 import { SuccessModal } from "@/components/verve/SuccessModal";
 import { Footer } from "@/components/verve/Footer";
@@ -41,6 +45,7 @@ function Index() {
   const [success, setSuccess] = useState(false);
   return (
     <main className="relative">
+      <LoadingScreen />
       <Nav />
       <Hero />
       <About />
@@ -51,6 +56,9 @@ function Index() {
       <GoalsObjectives />
       <Policies />
       <Process />
+      <Countdown />
+      <WhatWeValue />
+      <FinalCTA />
       <ApplicationForm onSuccess={() => setSuccess(true)} />
       <Footer />
       <SuccessModal open={success} onClose={() => setSuccess(false)} />

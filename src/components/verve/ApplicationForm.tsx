@@ -177,11 +177,12 @@ export function ApplicationForm({ onSuccess }: Props) {
                     disabled={isDisabled}
                     className={`relative text-left p-5 rounded-2xl transition-all border ${
                       isSelected
-                        ? "glass-gold border-[color:var(--gold)] shadow-gold-strong"
+                        ? "glass-gold border-[color:var(--gold)] shadow-gold-strong pulse-gold scale-[1.02]"
                         : isDisabled
                           ? "glass opacity-35 cursor-not-allowed border-transparent"
                           : "glass border-[color:var(--glass-border)] hover:border-[color:var(--glass-border-gold)]"
                     }`}
+
                     style={{ transformStyle: "preserve-3d" }}
                   >
                     {isSelected && (
