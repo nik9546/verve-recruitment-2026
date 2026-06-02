@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
+import { useRecruitmentSettings, effectiveState } from "@/lib/verve/use-recruitment";
 
-// Recruitment deadline — adjust freely
-const DEADLINE = new Date("2026-07-15T23:59:59+05:30").getTime();
-
-function diff() {
-  const ms = DEADLINE - Date.now();
+function diff(target: number) {
+  const ms = target - Date.now();
   if (ms <= 0) return null;
   const d = Math.floor(ms / 86400000);
   const h = Math.floor((ms % 86400000) / 3600000);
@@ -17,18 +15,45 @@ function diff() {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+const STATE_COPY: Record<string, { eyebrow: string; title: React.ReactNode; body?: string }> = {
+  open: {
+    eyebrow: "Recruitment Window Open",
+    title: <>Apply before the <span className="text-gradient-gold">window closes.</span></>,
+  },
+  closed: {
+    eyebrow: "Applications Closed",
+    title: <span className="text-gradient-gold">Applications Closed</span>,
+    body: "Applications for VERVE Recruitment 2026 have officially closed. Thank you for your interest in becoming a part of VERVE.",
+  },
+  interview: {
+    eyebrow: "Interview Phase",
+    title: <span className="text-gradient-gold">Interview Phase Underway</span>,
+    body: "Application submissions are now closed. The interview process is currently underway.",
+  },
+  results: {
+    eyebrow: "Results Phase",
+    title: <span className="text-gradient-gold">Results Published</span>,
+    body: "Recruitment process completed. Thank you to all applicants who participated.",
+  },
+};
+
 export function Countdown() {
+  const { data: settings } = useRecruitmentSettings();
+  const state = effectiveState(settings ?? undefined);
+  const target = settings ? new Date(settings.closes_at).getTime() : 0;
   const [mounted, setMounted] = useState(false);
   const [t, setT] = useState<ReturnType<typeof diff>>(null);
 
   useEffect(() => {
     setMounted(true);
-    setT(diff());
-    const id = setInterval(() => setT(diff()), 1000);
+    if (!target) return;
+    setT(diff(target));
+    const id = setInterval(() => setT(diff(target)), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [target]);
 
-  const closed = mounted && t === null;
+  const copy = STATE_COPY[state];
+  const showCountdown = state === "open" && target > 0;
 
   return (
     <section className="relative py-20">
@@ -45,17 +70,16 @@ export function Countdown() {
           </div>
           <div className="relative">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-gold text-[11px] uppercase tracking-[0.28em] text-gold mb-5">
-              <Clock className="w-3.5 h-3.5" /> {closed ? "Recruitment Window" : "Applications Closing Soon"}
+              <Clock className="w-3.5 h-3.5" /> {copy.eyebrow}
             </div>
-            <h3 className="font-display text-3xl sm:text-5xl font-semibold">
-              {closed ? (
-                <span className="text-gradient-gold">Applications Closed</span>
-              ) : (
-                <>Apply before the <span className="text-gradient-gold">window closes.</span></>
-              )}
-            </h3>
+            <h3 className="font-display text-3xl sm:text-5xl font-semibold">{copy.title}</h3>
+            {copy.body && (
+              <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground">
+                {copy.body}
+              </p>
+            )}
 
-            {!closed && (
+            {showCountdown && (
               <div className="mt-10 grid grid-cols-4 gap-3 sm:gap-5 max-w-3xl mx-auto">
                 {[
                   { v: t?.d, l: "Days" },

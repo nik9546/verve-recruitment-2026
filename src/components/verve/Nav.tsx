@@ -54,7 +54,7 @@ export function Nav() {
                 <img
                   src={verveLogo}
                   alt="VERVE"
-                  className="relative h-9 sm:h-10 w-auto select-none"
+                  className="relative h-5 sm:h-9 w-auto select-none"
                   draggable={false}
                 />
               </div>

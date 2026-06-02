@@ -14,7 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      verve_applications: {
+      applications: {
         Row: {
           availability: string
           commitment: boolean
@@ -29,6 +29,8 @@ export type Database = {
           phone: string
           roll_number: string
           semester: string
+          status: Database["public"]["Enums"]["application_status"]
+          updated_at: string
         }
         Insert: {
           availability: string
@@ -44,6 +46,8 @@ export type Database = {
           phone: string
           roll_number: string
           semester: string
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
         }
         Update: {
           availability?: string
@@ -59,6 +63,41 @@ export type Database = {
           phone?: string
           roll_number?: string
           semester?: string
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      recruitment_settings: {
+        Row: {
+          closes_at: string
+          cycle_name: string
+          id: number
+          interview_date: string | null
+          opens_at: string
+          results_date: string | null
+          state: Database["public"]["Enums"]["recruitment_state"]
+          updated_at: string
+        }
+        Insert: {
+          closes_at?: string
+          cycle_name?: string
+          id?: number
+          interview_date?: string | null
+          opens_at?: string
+          results_date?: string | null
+          state?: Database["public"]["Enums"]["recruitment_state"]
+          updated_at?: string
+        }
+        Update: {
+          closes_at?: string
+          cycle_name?: string
+          id?: number
+          interview_date?: string | null
+          opens_at?: string
+          results_date?: string | null
+          state?: Database["public"]["Enums"]["recruitment_state"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -70,7 +109,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      application_status:
+        | "pending"
+        | "shortlisted"
+        | "interview_scheduled"
+        | "selected"
+        | "rejected"
+      recruitment_state: "open" | "closed" | "interview" | "results"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -197,6 +242,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      application_status: [
+        "pending",
+        "shortlisted",
+        "interview_scheduled",
+        "selected",
+        "rejected",
+      ],
+      recruitment_state: ["open", "closed", "interview", "results"],
+    },
   },
 } as const

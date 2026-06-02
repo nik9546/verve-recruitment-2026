@@ -1,13 +1,15 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import confetti from "canvas-confetti";
 import { useForm, Controller } from "react-hook-form";
+import { useServerFn } from "@tanstack/react-start";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CheckCircle2, AlertCircle, Sparkles, Loader2 } from "lucide-react";
+import { CheckCircle2, AlertCircle, Sparkles, Loader2, Lock } from "lucide-react";
 import { SectionHeading } from "./SectionHeading";
 import { DEPARTMENTS, deriveInsight } from "@/lib/verve/departments";
-import { supabase } from "@/integrations/supabase/client";
+import { submitApplication } from "@/lib/verve/applications.functions";
+import { useRecruitmentSettings, effectiveState } from "@/lib/verve/use-recruitment";
 
 const SEMESTERS = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const AVAILABILITY = ["2–4 Hours", "4–6 Hours", "6–8 Hours", "8+ Hours"];
@@ -31,9 +33,27 @@ interface Props {
   onSuccess: () => void;
 }
 
+const STATE_MESSAGES: Record<string, { title: string; body: string }> = {
+  closed: {
+    title: "Applications Closed",
+    body: "Applications for VERVE Recruitment 2026 have officially closed. Thank you for your interest in becoming a part of VERVE.",
+  },
+  interview: {
+    title: "Interview Phase",
+    body: "Application submissions are now closed. The interview process is currently underway.",
+  },
+  results: {
+    title: "Results Phase",
+    body: "Recruitment process completed. Thank you to all applicants who participated.",
+  },
+};
+
 export function ApplicationForm({ onSuccess }: Props) {
+  const { data: settings } = useRecruitmentSettings();
+  const state = effectiveState(settings ?? undefined);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const submit = useServerFn(submitApplication);
 
   const {
     register,
@@ -74,23 +94,25 @@ export function ApplicationForm({ onSuccess }: Props) {
     setServerError(null);
     setSubmitting(true);
     try {
-      const payload = {
-        full_name: values.full_name,
-        roll_number: values.roll_number,
-        course: values.course,
-        semester: values.semester,
-        phone: values.phone,
-        email: values.email,
-        departments: values.departments,
-        motivation: values.motivation,
-        availability: values.availability,
-        commitment: values.commitment === "yes",
-        insight: deriveInsight(values.departments),
-      };
-      const { error } = await supabase.from("verve_applications").insert(payload);
-      if (error) throw error;
-
-      // Confetti
+      const res = await submit({
+        data: {
+          full_name: values.full_name,
+          roll_number: values.roll_number,
+          course: values.course,
+          semester: values.semester,
+          phone: values.phone,
+          email: values.email,
+          departments: values.departments,
+          motivation: values.motivation,
+          availability: values.availability,
+          commitment: values.commitment === "yes",
+          insight: deriveInsight(values.departments) || null,
+        },
+      });
+      if (!res.ok) {
+        setServerError(res.error);
+        return;
+      }
       const burst = (x: number) =>
         confetti({
           particleCount: 80,
@@ -101,7 +123,6 @@ export function ApplicationForm({ onSuccess }: Props) {
       burst(0.25);
       setTimeout(() => burst(0.5), 150);
       setTimeout(() => burst(0.75), 300);
-
       onSuccess();
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Something went wrong. Please try again.";
@@ -110,6 +131,27 @@ export function ApplicationForm({ onSuccess }: Props) {
       setSubmitting(false);
     }
   };
+
+  if (state !== "open") {
+    const m = STATE_MESSAGES[state];
+    return (
+      <section id="apply" className="relative py-28 sm:py-36">
+        <div className="mx-auto max-w-3xl px-6">
+          <div className="glass-strong rounded-3xl p-10 sm:p-14 text-center">
+            <div className="mx-auto mb-6 w-14 h-14 rounded-2xl glass-gold flex items-center justify-center">
+              <Lock className="w-6 h-6 text-gold" />
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-gradient-gold">
+              {m.title}
+            </h2>
+            <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">
+              {m.body}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="apply" className="relative py-28 sm:py-36">
@@ -121,7 +163,6 @@ export function ApplicationForm({ onSuccess }: Props) {
         />
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-14 space-y-10">
-          {/* Personal */}
           <div className="glass-strong rounded-3xl p-6 sm:p-10">
             <SectionLabel index="01" label="Personal Details" />
             <div className="mt-6 grid sm:grid-cols-2 gap-5">
@@ -151,7 +192,6 @@ export function ApplicationForm({ onSuccess }: Props) {
             </div>
           </div>
 
-          {/* Departments */}
           <div className="glass-strong rounded-3xl p-6 sm:p-10">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <SectionLabel index="02" label="Select Exactly 3 Departments" />
@@ -182,7 +222,6 @@ export function ApplicationForm({ onSuccess }: Props) {
                           ? "glass opacity-35 cursor-not-allowed border-transparent"
                           : "glass border-[color:var(--glass-border)] hover:border-[color:var(--glass-border-gold)]"
                     }`}
-
                     style={{ transformStyle: "preserve-3d" }}
                   >
                     {isSelected && (
@@ -233,7 +272,6 @@ export function ApplicationForm({ onSuccess }: Props) {
             </AnimatePresence>
           </div>
 
-          {/* Motivation + meta */}
           <div className="glass-strong rounded-3xl p-6 sm:p-10 space-y-6">
             <SectionLabel index="03" label="Tell Us About You" />
 
