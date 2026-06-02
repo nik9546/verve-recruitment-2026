@@ -35,7 +35,7 @@ export function LoadingScreen() {
               <img
                 src={verveLogo}
                 alt="VERVE"
-                className="h-20 sm:h-24 w-auto mx-auto select-none"
+                className="h-14 sm:h-16 w-auto mx-auto select-none"
                 draggable={false}
               />
             </motion.div>

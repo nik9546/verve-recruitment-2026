@@ -59,24 +59,24 @@ export function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.05 }}
-          className="mb-8 flex items-center justify-center gap-5 sm:gap-7"
+          className="mb-10 flex items-center justify-center gap-6 sm:gap-8"
         >
           <div className="relative">
             <span aria-hidden className="absolute -inset-3 rounded-2xl bg-gold/20 blur-xl opacity-70" />
             <img
               src={verveLogo}
               alt="VERVE"
-              className="relative h-12 sm:h-16 w-auto"
+              className="relative h-9 sm:h-12 w-auto"
               draggable={false}
             />
           </div>
-          <span aria-hidden className="h-10 sm:h-12 w-px bg-gradient-to-b from-transparent via-gold/70 to-transparent" />
+          <span aria-hidden className="h-9 sm:h-11 w-px bg-gradient-to-b from-transparent via-gold/70 to-transparent" />
           <div className="relative">
             <span aria-hidden className="absolute -inset-2 rounded-full bg-gold/20 blur-xl opacity-70" />
             <img
               src={collegeCrest}
               alt="St. Xavier's College, Ranchi"
-              className="relative h-12 w-12 sm:h-16 sm:w-16 object-contain rounded-full bg-white/95 p-1.5 ring-1 ring-[color:var(--glass-border-gold)]"
+              className="relative h-10 w-10 sm:h-12 sm:w-12 object-contain rounded-full bg-white/95 p-1.5 ring-1 ring-[color:var(--glass-border-gold)]"
               draggable={false}
             />
           </div>
@@ -87,16 +87,13 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="relative font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] leading-[0.95] font-semibold tracking-tight"
+          className="relative font-display text-4xl sm:text-5xl md:text-6xl lg:text-[72px] leading-[1.02] font-semibold tracking-tight text-gradient-gold"
         >
           <span
             aria-hidden
             className="pointer-events-none absolute inset-x-0 -top-10 -bottom-10 mx-auto max-w-3xl bg-gold/20 blur-[80px] opacity-70"
           />
-          <span className="relative">VERVE</span>
-          <span className="relative block mt-2 text-3xl sm:text-4xl md:text-5xl text-gradient-gold font-medium">
-            Recruitment Portal 2026
-          </span>
+          <span className="relative">Recruitment Portal 2026</span>
         </motion.h1>
 
 
