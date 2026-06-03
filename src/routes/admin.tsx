@@ -30,12 +30,19 @@ function AdminLayout() {
   return <AdminShell />;
 }
 
-const NAV = [
+type NavItem = {
+  to: "/admin" | "/admin/applications" | "/admin/analytics" | "/admin/settings" | "/admin/interview";
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+};
+const NAV: readonly NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/applications", label: "Applicants", icon: Users },
   { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/admin/interview", label: "Interview", icon: CalendarClock },
   { to: "/admin/settings", label: "Recruitment", icon: Settings },
-] as const;
+];
 
 function AdminShell() {
   const navigate = useNavigate();
