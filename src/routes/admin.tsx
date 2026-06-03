@@ -4,6 +4,7 @@ import { LayoutDashboard, Users, Settings, BarChart3, LogOut, Shield, CalendarCl
 import { checkAdminAuth, adminLogout } from "@/lib/verve/admin.functions";
 
 export const Route = createFileRoute("/admin")({
+  ssr: false,
   beforeLoad: async ({ location }) => {
     if (location.pathname === "/admin/login") return;
     const { isAdmin } = await checkAdminAuth();
