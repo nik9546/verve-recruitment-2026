@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "#leadership", label: "Leadership" },
   { href: "#certification", label: "Certificates" },
   { href: "#process", label: "Process" },
+  { href: "#interview", label: "Interview" },
 ];
 
 export function Nav() {
