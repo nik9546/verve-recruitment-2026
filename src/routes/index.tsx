@@ -15,6 +15,7 @@ import { WhatWeValue } from "@/components/verve/WhatWeValue";
 import { Countdown } from "@/components/verve/Countdown";
 import { FinalCTA } from "@/components/verve/FinalCTA";
 import { FollowVerve } from "@/components/verve/FollowVerve";
+import { InterviewInfo } from "@/components/verve/InterviewInfo";
 import { ApplicationForm } from "@/components/verve/ApplicationForm";
 import { SuccessModal } from "@/components/verve/SuccessModal";
 import { Footer } from "@/components/verve/Footer";
@@ -58,6 +59,7 @@ function Index() {
       <Policies />
       <Process />
       <Countdown />
+      <InterviewInfo />
       <WhatWeValue />
       <FinalCTA />
       <ApplicationForm onSuccess={() => setSuccess(true)} />

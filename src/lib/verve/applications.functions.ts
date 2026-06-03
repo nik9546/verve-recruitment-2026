@@ -19,7 +19,7 @@ const submitSchema = z.object({
   semester: z.string().trim().min(1).max(10),
   phone: z.string().trim().regex(/^[0-9+\-\s()]{7,20}$/),
   email: z.string().trim().email().max(255).toLowerCase(),
-  departments: z.array(z.string().min(1).max(80)).length(3),
+  departments: z.array(z.string().min(1).max(80)).min(1, "Select at least 1 department").max(3, "Select up to 3 departments"),
   motivation: z.string().trim().min(20).max(2000),
   availability: z.string().trim().min(1).max(40),
   commitment: z.boolean(),
