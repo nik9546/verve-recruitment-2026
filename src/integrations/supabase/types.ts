@@ -74,6 +74,10 @@ export type Database = {
           cycle_name: string
           id: number
           interview_date: string | null
+          interview_instructions: string | null
+          interview_published: boolean
+          interview_time: string | null
+          interview_venue: string | null
           opens_at: string
           results_date: string | null
           state: Database["public"]["Enums"]["recruitment_state"]
@@ -84,6 +88,10 @@ export type Database = {
           cycle_name?: string
           id?: number
           interview_date?: string | null
+          interview_instructions?: string | null
+          interview_published?: boolean
+          interview_time?: string | null
+          interview_venue?: string | null
           opens_at?: string
           results_date?: string | null
           state?: Database["public"]["Enums"]["recruitment_state"]
@@ -94,6 +102,10 @@ export type Database = {
           cycle_name?: string
           id?: number
           interview_date?: string | null
+          interview_instructions?: string | null
+          interview_published?: boolean
+          interview_time?: string | null
+          interview_venue?: string | null
           opens_at?: string
           results_date?: string | null
           state?: Database["public"]["Enums"]["recruitment_state"]
