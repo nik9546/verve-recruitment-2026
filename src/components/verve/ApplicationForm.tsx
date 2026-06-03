@@ -21,7 +21,7 @@ const schema = z.object({
   semester: z.string().min(1, "Select your semester"),
   phone: z.string().trim().regex(/^[0-9+\-\s()]{7,20}$/, "Enter a valid phone number"),
   email: z.string().trim().email("Enter a valid email").max(255),
-  departments: z.array(z.string()).length(3, "Select exactly 3 departments"),
+  departments: z.array(z.string()).min(1, "Select at least 1 department").max(3, "You can select a maximum of 3 departments"),
   motivation: z.string().trim().min(20, "Tell us a bit more (min 20 chars)").max(2000),
   availability: z.string().min(1, "Pick your availability"),
   commitment: z.literal("yes", { message: "Active participation is required" }),
@@ -194,14 +194,22 @@ export function ApplicationForm({ onSuccess }: Props) {
 
           <div className="glass-strong rounded-3xl p-6 sm:p-10">
             <div className="flex flex-wrap items-end justify-between gap-3">
-              <SectionLabel index="02" label="Select Exactly 3 Departments" />
+              <SectionLabel index="02" label="Select Your Preferred Departments" />
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground">Selected:</span>
-                <span className={`font-display font-bold text-lg ${selected.length === 3 ? "text-gold" : ""}`}>
+                <span className={`font-display font-bold text-lg ${selected.length >= 1 && selected.length <= 3 ? "text-gold" : ""}`}>
                   {selected.length} / 3
                 </span>
               </div>
             </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Select up to 3 departments based on your interests.
+            </p>
+            {selected.length === 3 && (
+              <p className="mt-1 text-xs text-gold">
+                You can select a maximum of 3 departments.
+              </p>
+            )}
             <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {DEPARTMENTS.map((d) => {
                 const isSelected = selected.includes(d.id);
