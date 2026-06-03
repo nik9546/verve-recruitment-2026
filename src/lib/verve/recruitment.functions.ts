@@ -44,3 +44,29 @@ export const updateRecruitmentSettings = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
+
+const interviewSchema = z.object({
+  interview_date: z.string().nullable().optional(),
+  interview_time: z.string().max(80).nullable().optional(),
+  interview_venue: z.string().max(255).nullable().optional(),
+  interview_instructions: z.string().max(4000).nullable().optional(),
+  interview_published: z.boolean(),
+});
+
+export const updateInterviewInfo = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => interviewSchema.parse(input))
+  .handler(async ({ data }) => {
+    await requireAdmin();
+    const { error } = await supabaseAdmin
+      .from("recruitment_settings")
+      .update({
+        interview_date: data.interview_date || null,
+        interview_time: data.interview_time || null,
+        interview_venue: data.interview_venue || null,
+        interview_instructions: data.interview_instructions || null,
+        interview_published: data.interview_published,
+      })
+      .eq("id", 1);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
