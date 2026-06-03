@@ -1,4 +1,4 @@
-import { Mail, MapPin } from "lucide-react";
+import { } from "lucide-react";
 import verveLogo from "@/assets/verve-logo.png";
 import collegeCrest from "@/assets/college-crest.png";
 
@@ -46,36 +46,20 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-12 items-start max-w-3xl mx-auto">
-          <div>
-            <div className="text-xs uppercase tracking-[0.28em] text-gold mb-4">Quick Links</div>
-            <ul className="space-y-2 text-sm">
-              {QUICK_LINKS.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    className="text-muted-foreground hover:text-gold transition-colors"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div className="text-xs uppercase tracking-[0.28em] text-gold mb-4">Contact</div>
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span>St. Xavier's College (Autonomous), Ranchi</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-gold shrink-0" />
-                <span>verve@sxcran.org</span>
-              </div>
-            </div>
-          </div>
+        <div className="max-w-md mx-auto text-center">
+          <div className="text-xs uppercase tracking-[0.28em] text-gold mb-4">Quick Links</div>
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+            {QUICK_LINKS.map((l) => (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  className="text-muted-foreground hover:text-gold transition-colors"
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-16 pt-6 border-t border-[color:var(--glass-border)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
