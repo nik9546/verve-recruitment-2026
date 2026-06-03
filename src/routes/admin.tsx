@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { LayoutDashboard, Users, Settings, BarChart3, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, Users, Settings, BarChart3, LogOut, Shield, CalendarClock } from "lucide-react";
 import { checkAdminAuth, adminLogout } from "@/lib/verve/admin.functions";
 
 export const Route = createFileRoute("/admin")({
