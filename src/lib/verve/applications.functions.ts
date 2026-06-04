@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { requireAdmin } from "./admin.server";
+import { getSupabaseAdmin, requireAdmin } from "./admin.server";
 
 const STATUS_VALUES = [
   "pending",
@@ -29,6 +28,7 @@ const submitSchema = z.object({
 export const submitApplication = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => submitSchema.parse(input))
   .handler(async ({ data }) => {
+    const supabaseAdmin = await getSupabaseAdmin();
     const { data: settings } = await supabaseAdmin
       .from("recruitment_settings")
       .select("state, closes_at")
@@ -83,6 +83,7 @@ export const listApplications = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => listSchema.parse(input ?? {}))
   .handler(async ({ data }) => {
     await requireAdmin();
+    const supabaseAdmin = await getSupabaseAdmin();
     let q = supabaseAdmin
       .from("applications")
       .select("*")
@@ -109,6 +110,7 @@ export const getApplication = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     await requireAdmin();
+    const supabaseAdmin = await getSupabaseAdmin();
     const { data: row, error } = await supabaseAdmin
       .from("applications")
       .select("*")
@@ -124,6 +126,7 @@ export const updateApplicationStatus = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     await requireAdmin();
+    const supabaseAdmin = await getSupabaseAdmin();
     const { error } = await supabaseAdmin
       .from("applications")
       .update({ status: data.status })
@@ -135,6 +138,7 @@ export const updateApplicationStatus = createServerFn({ method: "POST" })
 export const getApplicationStats = createServerFn({ method: "GET" }).handler(
   async () => {
     await requireAdmin();
+    const supabaseAdmin = await getSupabaseAdmin();
     const { data: rows, error } = await supabaseAdmin
       .from("applications")
       .select("status, semester, course, departments, created_at")
@@ -171,6 +175,7 @@ export const getApplicationStats = createServerFn({ method: "GET" }).handler(
 export const exportApplicationsCsv = createServerFn({ method: "GET" }).handler(
   async () => {
     await requireAdmin();
+    const supabaseAdmin = await getSupabaseAdmin();
     const { data, error } = await supabaseAdmin
       .from("applications")
       .select("*")
