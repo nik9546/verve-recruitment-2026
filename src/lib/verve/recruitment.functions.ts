@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { requireAdmin } from "./admin.server";
+import { getSupabaseAdmin, requireAdmin } from "./admin.server";
 
 export type RecruitmentState = "open" | "closed" | "interview" | "results";
 
 export const getPublicRecruitmentSettings = createServerFn({ method: "GET" }).handler(
   async () => {
+    const supabaseAdmin = await getSupabaseAdmin();
     const { data, error } = await supabaseAdmin
       .from("recruitment_settings")
       .select("*")
@@ -30,6 +30,7 @@ export const updateRecruitmentSettings = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => updateSchema.parse(input))
   .handler(async ({ data }) => {
     await requireAdmin();
+    const supabaseAdmin = await getSupabaseAdmin();
     const { error } = await supabaseAdmin
       .from("recruitment_settings")
       .update({
@@ -57,6 +58,7 @@ export const updateInterviewInfo = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => interviewSchema.parse(input))
   .handler(async ({ data }) => {
     await requireAdmin();
+    const supabaseAdmin = await getSupabaseAdmin();
     const { error } = await supabaseAdmin
       .from("recruitment_settings")
       .update({
