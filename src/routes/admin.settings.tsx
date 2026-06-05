@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { getPublicRecruitmentSettings, updateRecruitmentSettings } from "@/lib/verve/recruitment.functions";
+import { changeAdminPassword } from "@/lib/verve/admin.functions";
 
 export const Route = createFileRoute("/admin/settings")({
   component: SettingsPage,
@@ -133,7 +135,104 @@ function SettingsPage() {
           {saving ? "Saving…" : "Save Changes"}
         </button>
       </form>
+
+      <ChangePasswordCard />
     </div>
+  );
+}
+
+function ChangePasswordCard() {
+  const change = useServerFn(changeAdminPassword);
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [show, setShow] = useState({ current: false, next: false, confirm: false });
+  const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMsg(null);
+    if (next.length < 8) {
+      setMsg({ type: "err", text: "New password must be at least 8 characters." });
+      return;
+    }
+    if (next !== confirm) {
+      setMsg({ type: "err", text: "New password and confirmation do not match." });
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await change({ data: { currentPassword: current, newPassword: next } });
+      if (res.ok) {
+        setMsg({ type: "ok", text: "Password updated successfully." });
+        setCurrent(""); setNext(""); setConfirm("");
+      } else {
+        setMsg({ type: "err", text: res.error });
+      }
+    } catch (err) {
+      setMsg({ type: "err", text: err instanceof Error ? err.message : "Update failed" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="glass-strong rounded-2xl p-6 sm:p-8 space-y-5">
+      <div>
+        <h2 className="font-display text-2xl font-semibold">Change Admin Password</h2>
+        <p className="mt-1 text-muted-foreground text-sm">Update the password used to sign in at /admin/login.</p>
+      </div>
+      <PwField label="Current Password" value={current} onChange={setCurrent} visible={show.current} onToggle={() => setShow((s) => ({ ...s, current: !s.current }))} autoComplete="current-password" />
+      <PwField label="New Password" value={next} onChange={setNext} visible={show.next} onToggle={() => setShow((s) => ({ ...s, next: !s.next }))} autoComplete="new-password" />
+      <PwField label="Confirm New Password" value={confirm} onChange={setConfirm} visible={show.confirm} onToggle={() => setShow((s) => ({ ...s, confirm: !s.confirm }))} autoComplete="new-password" />
+      {msg && (
+        <p className={`text-sm ${msg.type === "ok" ? "text-gold" : "text-red-400"}`}>{msg.text}</p>
+      )}
+      <button
+        type="submit"
+        disabled={saving || !current || !next || !confirm}
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-gold text-navy-deep font-semibold shadow-gold disabled:opacity-50"
+      >
+        {saving ? "Updating…" : "Update Password"}
+      </button>
+    </form>
+  );
+}
+
+function PwField({
+  label, value, onChange, visible, onToggle, autoComplete,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  visible: boolean;
+  onToggle: () => void;
+  autoComplete?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="block mb-2 text-xs uppercase tracking-[0.22em] text-muted-foreground">{label}</span>
+      <div className="relative">
+        <input
+          type={visible ? "text" : "password"}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required
+          autoComplete={autoComplete}
+          className={`${inp} pr-11`}
+        />
+        <button
+          type="button"
+          onClick={onToggle}
+          tabIndex={-1}
+          aria-label={visible ? `Hide ${label}` : `Show ${label}`}
+          className="absolute inset-y-0 right-0 flex items-center justify-center w-11 text-muted-foreground hover:text-gold transition-colors"
+        >
+          {visible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+        </button>
+      </div>
+    </label>
   );
 }
 

@@ -48,18 +48,59 @@ export function getAdminCredential() {
   return null;
 }
 
-async function sha256(value: string) {
+async function sha256Hex(value: string) {
   const input = new TextEncoder().encode(value);
-  return new Uint8Array(await globalThis.crypto.subtle.digest("SHA-256", input));
+  const digest = new Uint8Array(await globalThis.crypto.subtle.digest("SHA-256", input));
+  return Array.from(digest, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function constantTimeEqual(a: string, b: string) {
+  let diff = a.length ^ b.length;
+  const len = Math.max(a.length, b.length);
+  for (let i = 0; i < len; i += 1) {
+    diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+  }
+  return diff === 0;
+}
+
+export async function hashAdminPassword(value: string) {
+  return sha256Hex(value);
 }
 
 export async function verifyAdminPassword(input: string, expected: string) {
-  const [a, b] = await Promise.all([sha256(input), sha256(expected)]);
-  let diff = a.length ^ b.length;
-  for (let i = 0; i < Math.max(a.length, b.length); i += 1) {
-    diff |= (a[i] ?? 0) ^ (b[i] ?? 0);
+  const inputHash = await sha256Hex(input);
+  const expectedHash =
+    expected.length === 64 && /^[0-9a-f]+$/i.test(expected)
+      ? expected.toLowerCase()
+      : await sha256Hex(expected);
+  return constantTimeEqual(inputHash, expectedHash);
+}
+
+export async function getStoredAdminPasswordHash(): Promise<string | null> {
+  try {
+    const admin = await getSupabaseAdmin();
+    const { data, error } = await admin
+      .from("admin_credentials")
+      .select("password_hash")
+      .eq("id", 1)
+      .maybeSingle();
+    if (error) {
+      console.error("getStoredAdminPasswordHash error", error);
+      return null;
+    }
+    return data?.password_hash ?? null;
+  } catch (error) {
+    console.error("getStoredAdminPasswordHash exception", error);
+    return null;
   }
-  return diff === 0;
+}
+
+export async function setStoredAdminPasswordHash(hash: string) {
+  const admin = await getSupabaseAdmin();
+  const { error } = await admin
+    .from("admin_credentials")
+    .upsert({ id: 1, password_hash: hash, updated_at: new Date().toISOString() });
+  if (error) throw error;
 }
 
 export async function getSupabaseAdmin() {
