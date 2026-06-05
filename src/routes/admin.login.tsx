@@ -12,6 +12,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const login = useServerFn(adminLogin);
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
