@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { getPublicRecruitmentSettings, updateRecruitmentSettings } from "@/lib/verve/recruitment.functions";
+import { changeAdminPassword } from "@/lib/verve/admin.functions";
 
 export const Route = createFileRoute("/admin/settings")({
   component: SettingsPage,
