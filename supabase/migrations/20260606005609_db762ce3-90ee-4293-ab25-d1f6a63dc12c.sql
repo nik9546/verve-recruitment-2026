@@ -1,0 +1,1 @@
+GRANT ALL ON public.admin_credentials TO service_role;
