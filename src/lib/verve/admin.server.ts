@@ -127,6 +127,25 @@ export async function getAdminSession() {
   return useSession<AdminSession>(getSessionConfig());
 }
 
+export type AdminResetSession = { otp?: string; expiresAt?: number; verified?: boolean };
+
+export async function getAdminResetSession() {
+  const secret = getAdminSessionSecret();
+  return useSession<AdminResetSession>({
+    password: secret.value,
+    name: "verve_admin_reset",
+    maxAge: 60 * 15,
+    cookie: { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/" },
+  });
+}
+
+export function generateOtp() {
+  const bytes = new Uint8Array(4);
+  globalThis.crypto.getRandomValues(bytes);
+  const n = ((bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]) >>> 0;
+  return String(n % 1000000).padStart(6, "0");
+}
+
 export async function requireAdmin() {
   const session = await getAdminSession();
   if (!session.data.isAdmin) {
