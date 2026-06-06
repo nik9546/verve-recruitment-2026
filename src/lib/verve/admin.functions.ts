@@ -1,7 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import {
+  generateOtp,
   getAdminCredential,
+  getAdminResetSession,
   getAdminSession,
   getAdminSessionSecret,
   getStoredAdminPasswordHash,
@@ -9,6 +11,8 @@ import {
   setStoredAdminPasswordHash,
   verifyAdminPassword,
 } from "./admin.server";
+
+const OTP_TTL_MS = 5 * 60 * 1000;
 
 async function resolveExpectedPassword(): Promise<string | null> {
   const stored = await getStoredAdminPasswordHash();
@@ -102,3 +106,67 @@ export const getAdminAuthHealth = createServerFn({ method: "GET" }).handler(asyn
     passwordSource: stored ? ("database" as const) : ("environment" as const),
   };
 });
+
+export const requestPasswordReset = createServerFn({ method: "POST" }).handler(async () => {
+  const otp = generateOtp();
+  const expiresAt = Date.now() + OTP_TTL_MS;
+  const session = await getAdminResetSession();
+  await session.update({ otp, expiresAt, verified: false });
+  return { ok: true as const, otp, expiresAt };
+});
+
+export const verifyResetOtp = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z.object({ otp: z.string().regex(/^\d{6}$/, "Enter the 6-digit code") }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    const session = await getAdminResetSession();
+    const { otp, expiresAt } = session.data;
+    if (!otp || !expiresAt) {
+      return { ok: false as const, error: "No active reset request. Start over." };
+    }
+    if (Date.now() > expiresAt) {
+      await session.clear();
+      return { ok: false as const, error: "Code expired. Request a new one." };
+    }
+    if (data.otp !== otp) {
+      return { ok: false as const, error: "Incorrect code." };
+    }
+    await session.update({ otp, expiresAt, verified: true });
+    return { ok: true as const };
+  });
+
+export const resetPasswordWithOtp = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        otp: z.string().regex(/^\d{6}$/),
+        newPassword: z.string().min(8, "Password must be at least 8 characters").max(200),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const session = await getAdminResetSession();
+    const { otp, expiresAt, verified } = session.data;
+    if (!otp || !expiresAt || !verified) {
+      return { ok: false as const, error: "Verify the code first." };
+    }
+    if (Date.now() > expiresAt) {
+      await session.clear();
+      return { ok: false as const, error: "Code expired. Request a new one." };
+    }
+    if (data.otp !== otp) {
+      return { ok: false as const, error: "Incorrect code." };
+    }
+    try {
+      const newHash = await hashAdminPassword(data.newPassword);
+      await setStoredAdminPasswordHash(newHash);
+    } catch (error) {
+      console.error("resetPasswordWithOtp save failed", error);
+      return { ok: false as const, error: "Could not save new password." };
+    }
+    await session.clear();
+    const admin = await getAdminSession();
+    await admin.clear();
+    return { ok: true as const };
+  });
