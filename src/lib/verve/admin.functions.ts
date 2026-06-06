@@ -1,7 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import {
+  generateOtp,
   getAdminCredential,
+  getAdminResetSession,
   getAdminSession,
   getAdminSessionSecret,
   getStoredAdminPasswordHash,
@@ -9,6 +11,8 @@ import {
   setStoredAdminPasswordHash,
   verifyAdminPassword,
 } from "./admin.server";
+
+const OTP_TTL_MS = 5 * 60 * 1000;
 
 async function resolveExpectedPassword(): Promise<string | null> {
   const stored = await getStoredAdminPasswordHash();
