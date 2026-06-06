@@ -139,7 +139,7 @@ function ForgotPasswordModal({ onClose, onSuccess }: { onClose: () => void; onSu
       if (!res.ok) { setError("Could not start reset."); return; }
       setServerOtp(res.otp);
       setExpiresAt(res.expiresAt);
-      setOtp(res.otp);
+
       setStep("otp");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not start reset.");
