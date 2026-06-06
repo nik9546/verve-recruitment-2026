@@ -108,7 +108,6 @@ function ForgotPasswordModal({ onClose, onSuccess }: { onClose: () => void; onSu
   const reset = useServerFn(resetPasswordWithOtp);
 
   const [step, setStep] = useState<Step>("request");
-  const [otp, setOtp] = useState("");
   const [serverOtp, setServerOtp] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [now, setNow] = useState(Date.now());
